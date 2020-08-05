@@ -248,6 +248,25 @@ if get_option('gtk3')
     requires: libvte_gtk3_public_deps,
     variables: 'exec_prefix=${prefix}',
   )
+
+  # VTERM{
+  # Adding static library to link with vterm
+  libvte_gtk3_static = static_library(
+    vte_gtk3_api_name,
+    sources: libvte_gtk3_sources,
+    include_directories: incs,
+    dependencies: libvte_gtk3_deps,
+    cpp_args: libvte_gtk3_cppflags,
+    install: false,
+  )
+
+  libvte_gtk3_static_dep = declare_dependency(
+    sources: libvte_gtk3_public_headers,
+    include_directories: [src_inc, vte_inc],
+    dependencies: libvte_gtk3_deps,
+    link_with: libvte_gtk3_static
+  )
+  # VTERM}
 endif
 
 ## Tests
