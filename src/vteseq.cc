@@ -6401,6 +6401,12 @@ Terminal::OSC(vte::parser::Sequence const& seq)
                 set_current_hyperlink(seq, it, cend);
                 break;
 
+        // VTERM{
+        case VTE_OSC_VTERM_MARK_PROMPT:
+                mark_prompt_row();
+                break;
+        // VTERM}
+
         case -1: /* default */
         case VTE_OSC_XTERM_SET_WINDOW_AND_ICON_TITLE:
         case VTE_OSC_XTERM_SET_WINDOW_TITLE: {

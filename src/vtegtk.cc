@@ -4681,3 +4681,33 @@ vte_terminal_get_color_background_for_draw(VteTerminal* terminal,
         color->blue = c->blue / 65535.;
         color->alpha = impl->m_background_alpha;
 }
+
+// VTERM{
+
+/**
+ * vte_terminal_prompt_prev:
+ * @terminal: a #VteTerminal
+ *
+ * Scroll-up the terminal screen to the first non-showing terminal prompt
+ */
+void
+vte_terminal_prompt_prev(VteTerminal *terminal)
+{
+       g_return_if_fail(VTE_IS_TERMINAL(terminal));
+       IMPL(terminal)->prompt_marker_scroll(true);
+}
+
+/**
+ * vte_terminal_prompt_next:
+ * @terminal: a #VteTerminal
+ *
+ * Scroll-down the terminal screen to the first non-showing terminal prompt
+ */
+void
+vte_terminal_prompt_next(VteTerminal *terminal)
+{
+       g_return_if_fail(VTE_IS_TERMINAL(terminal));
+       IMPL(terminal)->prompt_marker_scroll(false);
+}
+
+// VTERM}

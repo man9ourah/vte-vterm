@@ -1464,6 +1464,14 @@ public:
 
         void ringview_update();
 
+        // VTERM{
+        /* Prompt Markers */
+        GQueue* m_prompt_markers = g_queue_new();
+        guint m_prompt_markers_limit{1000};
+        void prompt_marker_scroll(bool direction);
+        void mark_prompt_row() noexcept;
+        // VTERM}
+
         /* Sequence handlers */
         bool m_line_wrapped; // signals line wrapped from character insertion
         // Note: inlining the handlers seems to worsen the performance, so we don't do that

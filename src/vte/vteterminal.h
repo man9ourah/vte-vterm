@@ -469,6 +469,14 @@ _VTE_PUBLIC
 void vte_terminal_get_color_background_for_draw(VteTerminal* terminal,
                                                 GdkRGBA* color) _VTE_GNUC_NONNULL(1) _VTE_GNUC_NONNULL(2);
 
+// VTERM{
+_VTE_PUBLIC
+void vte_terminal_prompt_prev(VteTerminal *terminal) _VTE_GNUC_NONNULL(1);
+
+_VTE_PUBLIC
+void vte_terminal_prompt_next(VteTerminal *terminal) _VTE_GNUC_NONNULL(1);
+// VTERM}
+
 /* Writing contents out */
 _VTE_PUBLIC
 gboolean vte_terminal_write_contents_sync (VteTerminal *terminal,

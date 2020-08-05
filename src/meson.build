@@ -137,6 +137,7 @@ libvte_common_sources = debug_sources + glib_glue_sources + modes_sources + pars
   'vteutils.h',
   'widget.cc',
   'widget.hh',
+  'vtevterm.cc',
 )
 
 if get_option('a11y')
