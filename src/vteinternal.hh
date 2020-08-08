@@ -1465,6 +1465,47 @@ public:
         void ringview_update();
 
         // VTERM{
+        /* VTerm cursor  */
+        struct _VteVTermCursor {
+            GtkWidget* cursor_widget = nullptr;
+            struct _vte_draw *draw = nullptr;
+
+            VteVisualPosition cursor;
+
+            long sticky_col = 0;
+
+            gboolean cursor_is_show = false;
+
+            _VteVTermCursor(){
+                draw = _vte_draw_new();
+            }
+
+            ~_VteVTermCursor(){
+                if(draw)
+                    _vte_draw_free(draw);
+            };
+        } vterm_cursor;
+
+        void vterm_cursor_init(GtkWidget* widget);
+        void vterm_cursor_set_shown(gboolean is_shown);
+        void vterm_cursor_move_forward(gboolean (*compare_end)(gunichar c));
+        void vterm_cursor_move_forward_end(gboolean (*compare_end)(gunichar c));
+        void vterm_cursor_move_backword(gboolean (*compare_end)(gunichar c));
+        void vterm_cursor_move(VTermCursorMove direction);
+        void vterm_cursor_draw(cairo_t *cr);
+        void vterm_draw_cells(struct _vte_draw_text_request *items,
+                                       gssize n,
+                                       uint32_t fore,
+                                       uint32_t back,
+                                       uint32_t deco,
+                                       bool clear,
+                                       bool draw_default_bg,
+                                       uint32_t attr,
+                                       bool hyperlink,
+                                       bool hilite,
+                                       int column_width,
+                                       int row_height);
+
         /* Prompt Markers */
         GQueue* m_prompt_markers = g_queue_new();
         guint m_prompt_markers_limit{1000};
