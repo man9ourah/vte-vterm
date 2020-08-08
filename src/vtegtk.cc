@@ -4710,4 +4710,55 @@ vte_terminal_prompt_next(VteTerminal *terminal)
        IMPL(terminal)->prompt_marker_scroll(false);
 }
 
+/**
+ * vte_terminal_vterm_cursor_init:
+ * @terminal: a #VteTerminal
+ * @cursor_widget: the GtkWidget of the cursor.
+ *
+ * Initialize another on screen cursor, and prepare for it to be drawn.
+ */
+void
+vte_terminal_vterm_cursor_init(VteTerminal *terminal, GtkWidget* cursor_widget){
+       g_return_if_fail(VTE_IS_TERMINAL(terminal));
+       IMPL(terminal)->vterm_cursor_init(cursor_widget);
+}
+
+/**
+ * vte_terminal_vterm_cursor_set_shown:
+ * @terminal: a #VteTerminal
+ * @is_shown: true to signal that the vterm's cursor is shown
+ *
+ * Signal the status of the vterm's cursor.
+ */
+void
+vte_terminal_vterm_cursor_set_shown(VteTerminal *terminal, gboolean is_shown){
+       g_return_if_fail(VTE_IS_TERMINAL(terminal));
+       IMPL(terminal)->vterm_cursor_set_shown(is_shown);
+}
+
+/**
+ * vte_terminal_vterm_cursor_draw:
+ * @terminal: a #VteTerminal
+ * @cr: the cairo where the cursor will be drawn on.
+ *
+ * Draw the cursor.
+ */
+void
+vte_terminal_vterm_cursor_draw(VteTerminal *terminal, cairo_t* cr){
+       g_return_if_fail(VTE_IS_TERMINAL(terminal));
+       IMPL(terminal)->vterm_cursor_draw(cr);
+}
+
+/**
+ * vte_terminal_vterm_cursor_move:
+ * @terminal: a #VteTerminal
+ * @move: a #VTermCursorMove.
+ *
+ * Move the cursor.
+ */
+void
+vte_terminal_vterm_cursor_move(VteTerminal *terminal, VTermCursorMove move){
+       g_return_if_fail(VTE_IS_TERMINAL(terminal));
+       IMPL(terminal)->vterm_cursor_move(move);
+}
 // VTERM}
