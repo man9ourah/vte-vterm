@@ -177,6 +177,50 @@ typedef enum {
         VTE_FORMAT_HTML = 2
 } VteFormat;
 
+// VTERM{
+/**
+ * VTermCursorMove:
+ * @NOP: Dont move the cursor, but ensure it is in the screen
+ * @INPUT: Move the cursor to the position of the input cursor.
+ * @RIGHT: Move cursor one cell right, wrap to below if soft-wrapped.
+ * @LEFT: Move cursor one cell left, wrap to above if soft-wrapped.
+ * @UP: Move cursor one cell up, scroll the screen if already in top.
+ * @DOWN: Move cursor one cell down, scroll the screen if already in bottom.
+ * @BOL: Move cursor to beginning of line, wrap to above if soft-wrapped.
+ * @EOL: Move cursor to the end of line.
+ * @RIGHT_WORD: Move the cursor one word right, wrap to below if soft-wrapped.
+ * @LEFT_WORD: Move cursor one word left, wrap to above if soft-wrapped.
+ * @RIGHT_WORD_END: Move the cursor to the end of one word right, wrap to below if soft-wrapped.
+ * @RIGHT_STMT: Move the cursor one WORD right, wrap to below if soft-wrapped.
+ * @LEFT_STMT: Move the cursor one WORD left, wrap to below if soft-wrapped.
+ * @RIGHT_STMT_END: Move the cursor to the end of one WORD right, wrap to below if soft-wrapped.
+ * @TOP: Move the cursor to the top of the screen.
+ * @BOTTOM: Move the cursor to the bottom of the screen.
+ * @MIDDLE: Move the cursor to the middle of the screen.
+ *
+ * An enumeratio type of the cursor moves that can be pass to vterm_cursor_move.
+ */
+typedef enum{
+    NOP,
+    INPUT,
+    RIGHT,
+    LEFT,
+    UP,
+    DOWN,
+    BOL,
+    EOL,
+    RIGHT_WORD,
+    LEFT_WORD,
+    RIGHT_WORD_END,
+    RIGHT_STMT,
+    LEFT_STMT,
+    RIGHT_STMT_END,
+    TOP,
+    BOTTOM,
+    MIDDLE,
+} VTermCursorMove;
+//VTERM}
+
 G_END_DECLS
 
 #endif /* __VTE_VTE_ENUMS_H__ */
