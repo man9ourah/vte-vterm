@@ -7344,6 +7344,15 @@ Terminal::ensure_font()
                         apply_font_metrics(cell_width, cell_height,
                                            char_ascent, char_descent,
                                            char_spacing);
+            // VTERM{
+            // Set the font in vterm's draw too
+            if(vterm_cursor.cursor_widget)
+                _vte_draw_set_text_font (vterm_cursor.draw,
+                                                 vterm_cursor.cursor_widget,
+                                                 m_fontdesc.get(),
+                                                 m_cell_width_scale,
+                                                 m_cell_height_scale);
+            // VTERM}
 		}
 	}
 }
@@ -7504,12 +7513,19 @@ Terminal::screen_set_size(VteScreen *screen_,
                                     long old_rows,
                                     bool do_rewrap)
 {
+    // VTERM{
+    // Changes to this function: added vterm's cursor to the markers array:
+    //  - Add one to its size
+    //  - insert vterm's cursor at 4
+    //  - push selection start & end to 5&6
+    // VTERM}
+
 	VteRing *ring = screen_->row_data;
 	VteVisualPosition cursor_saved_absolute;
 	VteVisualPosition below_viewport;
 	VteVisualPosition below_current_paragraph;
         VteVisualPosition selection_start, selection_end;
-	VteVisualPosition *markers[7];
+	VteVisualPosition *markers[8];
         gboolean was_scrolled_to_top = ((long) ceil(screen_->scroll_delta) == _vte_ring_delta(ring));
         gboolean was_scrolled_to_bottom = ((long) screen_->scroll_delta == screen_->insert_delta);
 	glong old_top_lines;
@@ -7543,13 +7559,14 @@ Terminal::screen_set_size(VteScreen *screen_,
         markers[1] = &below_viewport;
         markers[2] = &below_current_paragraph;
         markers[3] = &screen_->cursor;
+        markers[4] = &vterm_cursor.cursor;
         if (!m_selection_resolved.empty()) {
                 selection_start.row = m_selection_resolved.start_row();
                 selection_start.col = m_selection_resolved.start_column();
                 selection_end.row = m_selection_resolved.end_row();
                 selection_end.col = m_selection_resolved.end_column();
-                markers[4] = &selection_start;
-                markers[5] = &selection_end;
+                markers[5] = &selection_start;
+                markers[6] = &selection_end;
 	}
 
 	old_top_lines = below_current_paragraph.row - screen_->insert_delta;
@@ -9050,6 +9067,12 @@ Terminal::paint_cursor()
 	int x, y;
 	gboolean blink, selected, focus;
 
+    // VTERM{
+    // If vterm's cursor is shown dont show this one
+    if(vterm_cursor.cursor_is_show)
+        return;
+    // VTERM}
+
         //FIXMEchpe this should already be reflected in the m_cursor_blink_state below
 	if (!m_modes_private.DEC_TEXT_CURSOR())
 		return;
@@ -9095,6 +9118,8 @@ Terminal::paint_cursor()
 	item.y = row_to_pixel(drow);
         item.mirror = bidirow->vis_is_rtl(vcol);
         item.box_mirror = (row_data && (row_data->attr.bidi_flags & VTE_BIDI_FLAG_BOX_MIRROR));
+
+
 	if (cell && cell->c != 0) {
 		style = _vte_draw_get_style(cell->attr.bold(), cell->attr.italic());
 	}
