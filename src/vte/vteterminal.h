@@ -475,6 +475,19 @@ void vte_terminal_prompt_prev(VteTerminal *terminal) _VTE_GNUC_NONNULL(1);
 
 _VTE_PUBLIC
 void vte_terminal_prompt_next(VteTerminal *terminal) _VTE_GNUC_NONNULL(1);
+
+_VTE_PUBLIC
+void vte_terminal_vterm_cursor_init(VteTerminal *terminal, GtkWidget* cursor_widget) _VTE_GNUC_NONNULL(1);
+
+_VTE_PUBLIC
+void vte_terminal_vterm_cursor_set_shown(VteTerminal *terminal, gboolean is_shown) _VTE_GNUC_NONNULL(1);
+
+_VTE_PUBLIC
+void vte_terminal_vterm_cursor_draw(VteTerminal *terminal, cairo_t* cr) _VTE_GNUC_NONNULL(1);
+
+_VTE_PUBLIC
+void vte_terminal_vterm_cursor_move(VteTerminal *terminal, VTermCursorMove move) _VTE_GNUC_NONNULL(1);
+
 // VTERM}
 
 /* Writing contents out */
