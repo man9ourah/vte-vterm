@@ -435,6 +435,9 @@ Terminal::vterm_cursor_move(VTermCursorMove direction){
             // Set the cursor to the input cursor position
             vterm_cursor.cursor.col = m_screen->cursor.col;
             vterm_cursor.cursor.row = m_screen->cursor.row;
+
+            // This is an explicit col move, remember it
+            vterm_cursor.sticky_col = vterm_cursor.cursor.col;
             break;
         }
 
