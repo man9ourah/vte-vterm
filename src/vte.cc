@@ -9069,7 +9069,7 @@ Terminal::paint_cursor()
 
     // VTERM{
     // If vterm's cursor is shown dont show this one
-    if(vterm_cursor.cursor_is_show)
+    if(vterm_cursor.cursor_is_shown)
         return;
     // VTERM}
 

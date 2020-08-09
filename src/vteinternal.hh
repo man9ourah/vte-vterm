@@ -1474,7 +1474,7 @@ public:
 
             long sticky_col = 0;
 
-            gboolean cursor_is_show = false;
+            gboolean cursor_is_shown = false;
 
             _VteVTermCursor(){
                 draw = _vte_draw_new();

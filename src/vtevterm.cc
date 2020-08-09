@@ -86,7 +86,7 @@ Terminal::vterm_cursor_init(GtkWidget* widget){
 
 void
 Terminal::vterm_cursor_set_shown(gboolean is_shown){
-    vterm_cursor.cursor_is_show = is_shown;
+    vterm_cursor.cursor_is_shown = is_shown;
 }
 
 void
