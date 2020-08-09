@@ -179,6 +179,22 @@ typedef enum {
 
 // VTERM{
 /**
+ * VTermSelectionType:
+ * @VTERM_CHAR_SELECTION: character selection.
+ * @VTERM_LINE_SELECTION: line selection.
+ * @VTERM_BLOCK_SELECTION: block selection.
+ * @VTERM_SELECTION_NONE: delete selection.
+ *
+ * An enumeration type of the possible selection types to be used with #vterm_cursor_start_selection.
+ */
+typedef enum{
+    VTERM_CHAR_SELECTION,
+    VTERM_LINE_SELECTION,
+    VTERM_BLOCK_SELECTION,
+    VTERM_SELECTION_NONE,
+} VTermSelectionType;
+
+/**
  * VTermCursorMove:
  * @NOP: Dont move the cursor, but ensure it is in the screen
  * @INPUT: Move the cursor to the position of the input cursor.
@@ -198,7 +214,7 @@ typedef enum {
  * @BOTTOM: Move the cursor to the bottom of the screen.
  * @MIDDLE: Move the cursor to the middle of the screen.
  *
- * An enumeratio type of the cursor moves that can be pass to vterm_cursor_move.
+ * An enumeration type of the cursor moves that can be passed to #vterm_cursor_move.
  */
 typedef enum{
     NOP,

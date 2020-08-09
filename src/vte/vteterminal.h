@@ -483,6 +483,9 @@ _VTE_PUBLIC
 void vte_terminal_vterm_cursor_set_shown(VteTerminal *terminal, gboolean is_shown) _VTE_GNUC_NONNULL(1);
 
 _VTE_PUBLIC
+void vte_terminal_vterm_cursor_selection(VteTerminal *terminal, VTermSelectionType selection_type) _VTE_GNUC_NONNULL(1);
+
+_VTE_PUBLIC
 void vte_terminal_vterm_cursor_draw(VteTerminal *terminal, cairo_t* cr) _VTE_GNUC_NONNULL(1);
 
 _VTE_PUBLIC

@@ -1470,7 +1470,10 @@ public:
             GtkWidget* cursor_widget = nullptr;
             struct _vte_draw *draw = nullptr;
 
-            VteVisualPosition cursor;
+            VteVisualPosition cursor{0,0};
+
+            VteVisualPosition selection_start{0,0};
+            VTermSelectionType selection_type = VTERM_SELECTION_NONE;
 
             long sticky_col = 0;
 
@@ -1488,6 +1491,8 @@ public:
 
         void vterm_cursor_init(GtkWidget* widget);
         void vterm_cursor_set_shown(gboolean is_shown);
+        void vterm_cursor_selection(VTermSelectionType selection_type);
+        void vterm_cursor_update_selection();
         void vterm_cursor_move_forward(gboolean (*compare_end)(gunichar c));
         void vterm_cursor_move_forward_end(gboolean (*compare_end)(gunichar c));
         void vterm_cursor_move_backword(gboolean (*compare_end)(gunichar c));

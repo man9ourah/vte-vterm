@@ -4737,6 +4737,19 @@ vte_terminal_vterm_cursor_set_shown(VteTerminal *terminal, gboolean is_shown){
 }
 
 /**
+ * vte_terminal_vterm_cursor_selection:
+ * @terminal: a #VteTerminal
+ * @selection_type: a #VTermSelectionType.
+ *
+ * Start or end a vterm selection.
+ */
+void
+vte_terminal_vterm_cursor_selection(VteTerminal *terminal, VTermSelectionType selection_type){
+       g_return_if_fail(VTE_IS_TERMINAL(terminal));
+       IMPL(terminal)->vterm_cursor_selection(selection_type);
+}
+
+/**
  * vte_terminal_vterm_cursor_draw:
  * @terminal: a #VteTerminal
  * @cr: the cairo where the cursor will be drawn on.

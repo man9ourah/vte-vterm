@@ -90,6 +90,72 @@ Terminal::vterm_cursor_set_shown(gboolean is_shown){
 }
 
 void
+Terminal::vterm_cursor_selection(VTermSelectionType selection_type){
+    vterm_cursor.selection_type = selection_type;
+
+    // Ensure cursor is on screen
+    // this is also to update between restricted cursor position in block mode and
+    // non-restricted in others
+    vterm_cursor_move(VTermCursorMove::NOP);
+
+    // If selection is really block mode, is will be updated in update_selection
+    m_selection_block_mode = false;
+    if(selection_type == VTERM_SELECTION_NONE){
+        deselect_all();
+        return;
+    }
+
+    vterm_cursor.selection_start = vterm_cursor.cursor;
+    vterm_cursor_update_selection();
+}
+
+void
+Terminal::vterm_cursor_update_selection(){
+    switch(vterm_cursor.selection_type){
+        case VTERM_CHAR_SELECTION:{
+            // select_text expect its arguments to be ordered such that the
+            // first position is before the second postion.. so we need to
+            // figure that out. We do it termite's way..
+            const long begin = vterm_cursor.selection_start.row * m_column_count +
+                vterm_cursor.selection_start.col;
+            const long end = vterm_cursor.cursor.row * m_column_count +
+                vterm_cursor.cursor.col;
+            if(begin < end)
+                select_text(
+                        vterm_cursor.selection_start.col, vterm_cursor.selection_start.row,
+                        vterm_cursor.cursor.col + 1, vterm_cursor.cursor.row);
+            else
+                select_text(
+                        vterm_cursor.cursor.col, vterm_cursor.cursor.row,
+                        vterm_cursor.selection_start.col + 1, vterm_cursor.selection_start.row);
+            break;
+        }
+
+        case VTERM_LINE_SELECTION:{
+                 select_text(
+                        0, MIN(vterm_cursor.cursor.row, vterm_cursor.selection_start.row),
+                        m_column_count, MAX(vterm_cursor.cursor.row, vterm_cursor.selection_start.row));
+            break;
+        }
+
+        case VTERM_BLOCK_SELECTION:{
+            m_selection_block_mode = true;
+                 select_text(
+                        MIN(vterm_cursor.cursor.col, vterm_cursor.selection_start.col),
+                        MIN(vterm_cursor.cursor.row, vterm_cursor.selection_start.row),
+                        MAX(vterm_cursor.cursor.col, vterm_cursor.selection_start.col),
+                        MAX(vterm_cursor.cursor.row, vterm_cursor.selection_start.row));
+            break;
+        }
+
+        case VTERM_SELECTION_NONE:{
+            // Nothing to be done
+            return;
+        }
+    }
+}
+
+void
 Terminal::vterm_cursor_move_backword(gboolean (*compare_end)(gunichar c)){
     VteRowData const* rowdata = nullptr;
     long col = vterm_cursor.cursor.col;
@@ -422,13 +488,22 @@ Terminal::vterm_cursor_move(VTermCursorMove direction){
             // For the row, we clamp between top and bottom displayed rows
             vterm_cursor.cursor.row = CLAMP(vterm_cursor.cursor.row, first_displayed_row(), last_displayed_row());
 
-            // For the column, we clamp between 0 and the last non-whitespace
-            // char
-            VteRowData const* rowdata = find_row_data(vterm_cursor.cursor.row);
-            long len = MAX(0, vterm_get_row_length(rowdata) - 1);
+            // For the column, we clamp between 0 and the last column
+            long len = MAX(0, m_column_count - 1);
+
+            // We allow free motion if in block mode, but restricted to
+            // non-whitespace trailing characters in othe modes
+            if(vterm_cursor.selection_type != VTermSelectionType::VTERM_BLOCK_SELECTION){
+                VteRowData const* rowdata = find_row_data(vterm_cursor.cursor.row);
+                if(rowdata)
+                    len = MAX(0, vterm_get_row_length(rowdata) - 1);
+            }
+
             vterm_cursor.cursor.col = CLAMP(vterm_cursor.cursor.col, 0, len);
 
-            break;
+            // Note that this is a return, not a break.. so no infinite loop
+            // with the call at the bottom of this function
+            return;
         }
 
         case VTermCursorMove::INPUT:{
@@ -622,6 +697,12 @@ Terminal::vterm_cursor_move(VTermCursorMove direction){
             break;
         }
     }
+
+    // Ensure cursor is on screen
+    vterm_cursor_move(VTermCursorMove::NOP);
+
+    // Update the selection
+    vterm_cursor_update_selection();
 }
 
 void
@@ -840,9 +921,6 @@ void
 Terminal::vterm_cursor_draw(cairo_t *cr){
     // a copy of paint_cursor in vte.cc
 
-    // Ensure cursor is on screen
-    vterm_cursor_move(VTermCursorMove::NOP);
-
     // shadow the global member m_draw with vterm's cursor
     struct _vte_draw* m_draw = vterm_cursor.draw;
 
@@ -902,7 +980,7 @@ Terminal::vterm_cursor_draw(cairo_t *cr){
         style = _vte_draw_get_style(cell->attr.bold(), cell->attr.italic());
     }
 
-    selected = cell_is_selected_log(lcol, drow);
+    selected = false; // Make the vterm cursor always shown (deleted: cell_is_selected_log(lcol, drow));
     determine_cursor_colors(cell, selected, &fore, &back, &deco);
     rgb_from_index<8, 8, 8>(back, bg);
 
