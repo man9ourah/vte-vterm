@@ -1038,35 +1038,39 @@ find_prompt_cb(gconstpointer it, gconstpointer goal)
 void
 Terminal::prompt_marker_scroll(bool direction)
 {
-    GList* prompt_row = nullptr;
+    if(g_queue_get_length(m_prompt_markers) == 0)
+        return;
+
+    GList* prompt_before_screen = nullptr;
+
+    vte::grid::row_t screen_top = first_displayed_row();
+    vte::grid::row_t first_prompt = (vte::grid::row_t) (g_queue_peek_tail(m_prompt_markers));
+
+    // We look for the first prompt that is before the top of the display
+    vte::grid::row_t search_prompt = MAX(first_prompt, screen_top - 1);
+    prompt_before_screen = g_queue_find_custom(m_prompt_markers,
+                                    (gpointer)(search_prompt), find_prompt_cb);
+
+    if(!prompt_before_screen)
+        return;
+
     if(direction){
-        // We are going up!
-        // We look for the first prompt that is before the top of the display
-        vte::grid::row_t top = first_displayed_row() == 0 ? 0 : first_displayed_row() - 1;
-
-        prompt_row = g_queue_find_custom(m_prompt_markers,
-                                        (gpointer)(top), find_prompt_cb);
-
-        if(prompt_row)
-            // Found it! Go there!
-            queue_adjustment_value_changed_clamped((vte::grid::row_t)(prompt_row->data));
+        // Scroll up
+        // go the first prompt before screen top
+        queue_adjustment_value_changed_clamped((vte::grid::row_t)(prompt_before_screen->data));
     }else{
-        // We are going down!
-        // We look for the first prompt *inside* the display from the bottom
-        vte::grid::row_t bottom = last_displayed_row();
+        // Scroll down
+        if(GList* prompt_in_or_below_screen = prompt_before_screen->prev){
+            // We initially decide that we will go to this prompt
+            vte::grid::row_t goto_row = (vte::grid::row_t)(prompt_in_or_below_screen->data);
 
-        // If the last prompt is already in display, dont search
-        vte::grid::row_t last_prompt = (vte::grid::row_t)(g_queue_peek_head(m_prompt_markers));
-        if(last_prompt < bottom)
-            return;
+            if(goto_row == screen_top && prompt_in_or_below_screen->prev){
+                // Unless it is already on screen top, and there is a prompt
+                // after it
+                goto_row = (vte::grid::row_t)(prompt_in_or_below_screen->prev->data);
+            }
 
-        prompt_row = g_queue_find_custom(m_prompt_markers,
-                                        (gpointer)(bottom), find_prompt_cb);
-
-        if(prompt_row && prompt_row->prev){
-            // Found it, and if there is a prompt after it, go there!
-            vte::grid::row_t prompt_prev = (vte::grid::row_t)(prompt_row->prev->data);
-            queue_adjustment_value_changed_clamped(prompt_prev);
+            queue_adjustment_value_changed_clamped(goto_row);
         }
     }
 }
