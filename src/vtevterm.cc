@@ -106,6 +106,11 @@ Terminal::vterm_cursor_selection(VTermSelectionType selection_type){
     }
 
     vterm_cursor.selection_start = vterm_cursor.cursor;
+    if (!m_selection_resolved.empty()){
+        vterm_cursor.selection_start.col = m_selection_resolved.start_column();
+        vterm_cursor.selection_start.row = m_selection_resolved.start_row();
+    }
+
     vterm_cursor_update_selection();
 }
 
@@ -695,6 +700,13 @@ Terminal::vterm_cursor_move(VTermCursorMove direction){
             // it is more than the new row columns
             vterm_cursor.cursor.col = vterm_cursor.sticky_col;
             break;
+        }
+
+        case VTermCursorMove::SEARCH_SELECTION:{
+            // Here the text has already been selected, we just have to position
+            // the cursor at the end of it
+            vterm_cursor.cursor.col = m_selection_resolved.end_column() - 1;
+            vterm_cursor.cursor.row = m_selection_resolved.end_row();
         }
     }
 

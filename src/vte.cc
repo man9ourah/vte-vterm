@@ -10876,6 +10876,10 @@ Terminal::search_find (bool backward)
         pcre2_match_data_free_8(match_data);
         pcre2_match_context_free_8(match_context);
 
+        // VTERM{
+        if(match_found)
+            vterm_cursor_move(SEARCH_SELECTION);
+        // VTERM}
 	return match_found;
 }
 

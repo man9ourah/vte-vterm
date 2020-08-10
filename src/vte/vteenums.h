@@ -234,6 +234,7 @@ typedef enum{
     TOP,
     BOTTOM,
     MIDDLE,
+    SEARCH_SELECTION,
 } VTermCursorMove;
 //VTERM}
 
