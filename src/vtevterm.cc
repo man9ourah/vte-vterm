@@ -921,6 +921,10 @@ void
 Terminal::vterm_cursor_draw(cairo_t *cr){
     // a copy of paint_cursor in vte.cc
 
+    // Ensure cursor is on screen
+    // This call is necessary to clamp the cursor when scrolling or resizing
+    vterm_cursor_move(VTermCursorMove::NOP);
+
     // shadow the global member m_draw with vterm's cursor
     struct _vte_draw* m_draw = vterm_cursor.draw;
 
