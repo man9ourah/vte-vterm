@@ -787,21 +787,21 @@ public:
                                        bool fill);
         /* inline */ VteRowData* ring_append(bool fill);
         /* inline */ void ring_remove(vte::grid::row_t position);
-        inline VteRowData const* find_row_data(vte::grid::row_t row) const;
+        VteRowData const* find_row_data(vte::grid::row_t row) const;
         inline VteRowData* find_row_data_writable(vte::grid::row_t row) const;
-        inline VteCell const* find_charcell(vte::grid::column_t col,
+        VteCell const* find_charcell(vte::grid::column_t col,
+                                     vte::grid::row_t row) const;
+        vte::grid::column_t find_start_column(vte::grid::column_t col,
+                                              vte::grid::row_t row) const;
+        vte::grid::column_t find_end_column(vte::grid::column_t col,
                                             vte::grid::row_t row) const;
-        inline vte::grid::column_t find_start_column(vte::grid::column_t col,
-                                                     vte::grid::row_t row) const;
-        inline vte::grid::column_t find_end_column(vte::grid::column_t col,
-                                                   vte::grid::row_t row) const;
 
-        inline vte::view::coord_t scroll_delta_pixel() const;
-        inline vte::grid::row_t pixel_to_row(vte::view::coord_t y) const;
-        inline vte::view::coord_t row_to_pixel(vte::grid::row_t row) const;
-        inline vte::grid::row_t first_displayed_row() const;
-        inline vte::grid::row_t last_displayed_row() const;
-        inline bool cursor_is_onscreen() const noexcept;
+        vte::view::coord_t scroll_delta_pixel() const;
+        vte::grid::row_t pixel_to_row(vte::view::coord_t y) const;
+        vte::view::coord_t row_to_pixel(vte::grid::row_t row) const;
+        vte::grid::row_t first_displayed_row() const;
+        vte::grid::row_t last_displayed_row() const;
+        bool cursor_is_onscreen() const noexcept;
 
         inline VteRowData *insert_rows (guint cnt);
         VteRowData *ensure_row();
@@ -1049,9 +1049,9 @@ public:
         GString* get_selected_text(GArray* attributes = nullptr);
 
         template<unsigned int redbits, unsigned int greenbits, unsigned int bluebits>
-        inline void rgb_from_index(guint index,
+        void rgb_from_index(guint index,
                                    vte::color::rgb& color) const;
-        inline void determine_colors(VteCellAttr const* attr,
+        void determine_colors(VteCellAttr const* attr,
                                      bool selected,
                                      bool cursor,
                                      guint *pfore,
@@ -1062,7 +1062,7 @@ public:
                                      guint *pfore,
                                      guint *pback,
                                      guint *pdeco) const;
-        inline void determine_cursor_colors(VteCell const* cell,
+        void determine_cursor_colors(VteCell const* cell,
                                             bool selected,
                                             guint *pfore,
                                             guint *pback,

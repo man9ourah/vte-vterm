@@ -213,20 +213,20 @@ Terminal::pixel_to_row(vte::view::coord_t y) const
  * Returns: Y coordinate relative to viewport with top padding excluded. If the row is
  *   outside the viewport, may return any value < 0 or >= height
  */
-inline vte::view::coord_t
+vte::view::coord_t
 Terminal::row_to_pixel(vte::grid::row_t row) const
 {
         // FIXMEchpe this is bad!
         return row * m_cell_height - (glong)round(m_screen->scroll_delta * m_cell_height);
 }
 
-inline vte::grid::row_t
+vte::grid::row_t
 Terminal::first_displayed_row() const
 {
         return pixel_to_row(0);
 }
 
-inline vte::grid::row_t
+vte::grid::row_t
 Terminal::last_displayed_row() const
 {
         /* Get the logical row number displayed at the bottom pixel position */
