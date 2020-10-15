@@ -207,9 +207,13 @@ typedef enum{
  * @RIGHT_WORD: Move the cursor one word right, wrap to below if soft-wrapped.
  * @LEFT_WORD: Move cursor one word left, wrap to above if soft-wrapped.
  * @RIGHT_WORD_END: Move the cursor to the end of one word right, wrap to below if soft-wrapped.
+ * @BEGIN_WORD: Move cursor to the beginning of current word, wrap to above if soft-wrapped.
+ * @END_WORD: Move cursor to the end of current word, wrap to below if soft-wrapped.
  * @RIGHT_STMT: Move the cursor one WORD right, wrap to below if soft-wrapped.
  * @LEFT_STMT: Move the cursor one WORD left, wrap to below if soft-wrapped.
  * @RIGHT_STMT_END: Move the cursor to the end of one WORD right, wrap to below if soft-wrapped.
+ * @BEGIN_STMT: Move cursor to the beginning of current WORD, wrap to above if soft-wrapped.
+ * @END_STMT: Move cursor to the end of current WORD, wrap to below if soft-wrapped.
  * @TOP: Move the cursor to the top of the screen.
  * @BOTTOM: Move the cursor to the bottom of the screen.
  * @MIDDLE: Move the cursor to the middle of the screen.
@@ -228,9 +232,13 @@ typedef enum{
     RIGHT_WORD,
     LEFT_WORD,
     RIGHT_WORD_END,
+    BEGIN_WORD,
+    END_WORD,
     RIGHT_STMT,
     LEFT_STMT,
     RIGHT_STMT_END,
+    BEGIN_STMT,
+    END_STMT,
     TOP,
     BOTTOM,
     MIDDLE,

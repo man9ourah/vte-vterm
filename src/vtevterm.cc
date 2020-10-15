@@ -19,6 +19,7 @@
  */
 
 #include "config.h"
+#include "vterowdata.hh"
 
 #include <search.h>
 #include <stdlib.h>
@@ -631,6 +632,78 @@ Terminal::vterm_cursor_move(VTermCursorMove direction){
 
         case VTermCursorMove::LEFT_WORD:{
             vterm_cursor_move_backword(vterm_is_word_char);
+
+            // This is an explicit col move, remember it
+            vterm_cursor.sticky_col = vterm_cursor.cursor.col;
+            break;
+        }
+
+        case VTermCursorMove::BEGIN_STMT:
+        case VTermCursorMove::BEGIN_WORD:{
+            // We go the beginning of the current word, but not before
+            long begin_col = vterm_cursor.cursor.col;
+
+            // We first check the char before it to see if it is part of the word
+            if(begin_col - 1 >= 0){
+                // There might be a char before
+                VteCell const* pcell = find_charcell(begin_col - 1, vterm_cursor.cursor.row);
+
+                if(pcell){
+                    // There is a char before it
+                    // is it a word char?
+
+                    gboolean (*bound_check)(gunichar) = vterm_is_word_char;
+                    if(direction == VTermCursorMove::END_STMT)
+                        bound_check = vterm_is_stmt_char;
+
+                    if(bound_check(pcell->c)){
+                        // Yes it's!, so we initiate a backword motion,, this
+                        // will get us to the beginning of current word
+                        vterm_cursor_move_backword(bound_check);
+                    }
+                }
+            }
+            // Otherwise, we can just say we are already in the beginning of the
+            // word
+
+            // This is an explicit col move, remember it
+            vterm_cursor.sticky_col = vterm_cursor.cursor.col;
+            break;
+        }
+
+        case VTermCursorMove::END_STMT:
+        case VTermCursorMove::END_WORD:{
+            // We go the end of the current word, but not after
+            long begin_col = vterm_cursor.cursor.col;
+
+            // We first check the char after it to see if it is part of the word
+            VteRowData const* rowdata = find_row_data(vterm_cursor.cursor.row);
+
+            // Really redundant check since it is current row, but why not
+            if(!rowdata)
+                break;
+
+            if(begin_col + 1 < _vte_row_data_nonempty_length(rowdata)){
+                // There might be a char after
+                VteCell const* pcell = find_charcell(begin_col + 1, vterm_cursor.cursor.row);
+
+                if(pcell){
+                    // There is a char after it
+                    // is it a word char?
+
+                    gboolean (*bound_check)(gunichar) = vterm_is_word_char;
+                    if(direction == VTermCursorMove::END_STMT)
+                        bound_check = vterm_is_stmt_char;
+
+                    if(bound_check(pcell->c)){
+                        // Yes it's!, so we initiate a forward-end motion,, this
+                        // will get us to the end of current word
+                        vterm_cursor_move_forward_end(bound_check);
+                    }
+                }
+            }
+            // Otherwise, we can just say we are already in the end of the
+            // word
 
             // This is an explicit col move, remember it
             vterm_cursor.sticky_col = vterm_cursor.cursor.col;
