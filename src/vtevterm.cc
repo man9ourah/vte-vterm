@@ -60,7 +60,6 @@ static guint16 vterm_get_row_length(VteRowData const* row){
     return len;
 }
 
-
 static long vterm_get_first_non_blank_col(VteRowData const* row){
     // We want to ignore the white spaces at the beginning
     guint16 col;
@@ -436,7 +435,7 @@ Terminal::vterm_cursor_move_forward(gboolean (*compare_end)(gunichar c)){
 
             bool is_non_word_char = !is_word_char && !g_unichar_isspace(pcell->c);
             if(is_non_word_char && end_of_non_word){
-                // this is a new seq of non words 
+                // this is a new seq of non words
                 break;
             }
 
