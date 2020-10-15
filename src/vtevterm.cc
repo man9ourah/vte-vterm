@@ -653,7 +653,7 @@ Terminal::vterm_cursor_move(VTermCursorMove direction){
                     // is it a word char?
 
                     gboolean (*bound_check)(gunichar) = vterm_is_word_char;
-                    if(direction == VTermCursorMove::END_STMT)
+                    if(direction == VTermCursorMove::BEGIN_STMT)
                         bound_check = vterm_is_stmt_char;
 
                     if(bound_check(pcell->c)){
