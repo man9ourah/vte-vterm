@@ -27,7 +27,7 @@ libvte_gtk3_enum_sources = gnome.mkenums(
   sources: libvte_common_enum_headers,
   c_template: '../vtetypebuiltins.cc.template',
   h_template: '../vtetypebuiltins.h.template',
-  install_header: true,
+  install_header: false,
   install_dir: vte_includedir / vte_gtk3_api_path
 )
 
@@ -57,10 +57,10 @@ libvte_version_headers = configure_file(
 if get_option('gtk3')
   libvte_gtk3_public_headers = libvte_common_public_headers + [libvte_version_headers]
 
-  install_headers(
-    libvte_gtk3_public_headers,
-    subdir: vte_gtk3_api_path
-  )
+  # install_headers(
+  #   libvte_gtk3_public_headers,
+  #   subdir: vte_gtk3_api_path
+  # )
 
   # BUG! Due to meson bug, this header cannot be installed with the rule above. Instead,
   # use the install_header attribute in the mkenums call, and add the header afterwards

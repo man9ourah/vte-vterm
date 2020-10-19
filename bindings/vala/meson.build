@@ -35,7 +35,7 @@ libvte_gtk3_vapi_dep = gnome.generate_vapi(
   vte_gtk3_api_name,
   sources: libvte_gtk3_gir[0],
   packages: libvte_gtk3_vapi_deps,
-  install: true,
+  install: false,
 )
 
 # Vala test application

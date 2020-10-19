@@ -53,6 +53,6 @@ if get_option('gtk3')
     dependencies: app_gtk3_deps,
     cpp_args: app_gtk3_cppflags,
     include_directories: top_inc,
-    install: true,
+    install: false,
   )
 endif
