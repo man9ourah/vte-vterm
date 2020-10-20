@@ -459,7 +459,7 @@ configure_file(
 
 subdir('src')
 subdir('bindings')
-subdir('po')
+# subdir('po')
 
 if get_option('docs')
   subdir('doc/reference')
