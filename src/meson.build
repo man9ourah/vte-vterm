@@ -239,16 +239,16 @@ if get_option('gtk3')
     link_with: libvte_gtk3
   )
 
-  pkg.generate(
-    libvte_gtk3,
-    version: vte_version,
-    name: 'vte',
-    description: 'VTE widget for GTK+ 3.0',
-    filebase: vte_gtk3_api_name,
-    subdirs: vte_gtk3_api_name,
-    requires: libvte_gtk3_public_deps,
-    variables: 'exec_prefix=${prefix}',
-  )
+  # pkg.generate(
+  #   libvte_gtk3,
+  #   version: vte_version,
+  #   name: 'vte',
+  #   description: 'VTE widget for GTK+ 3.0',
+  #   filebase: vte_gtk3_api_name,
+  #   subdirs: vte_gtk3_api_name,
+  #   requires: libvte_gtk3_public_deps,
+  #   variables: 'exec_prefix=${prefix}',
+  # )
 
   # VTERM{
   # Adding static library to link with vterm
