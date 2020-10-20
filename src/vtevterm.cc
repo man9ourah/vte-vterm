@@ -1,7 +1,5 @@
 /*
- * Copyright © 2001-2004 Red Hat, Inc.
- * Copyright © 2015 David Herrmann <dh.herrmann@gmail.com>
- * Copyright © 2008-2018 Christian Persch
+ * Mansour Alharthi <man9our.ah@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
