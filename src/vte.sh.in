@@ -26,7 +26,7 @@ __vte_osc7 () {
   printf "\033]7;file://%s%s\033\\" "${HOSTNAME}" "$(@libexecdir@/vte-urlencode-cwd)"
   # VTERM{
   # printing vterm's prompt mark
-  printf "\033]600;\033\\"
+  printf "\033]133;\033\\"
   #VTERM}
 }
 

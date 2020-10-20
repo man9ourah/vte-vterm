@@ -6402,7 +6402,7 @@ Terminal::OSC(vte::parser::Sequence const& seq)
                 break;
 
         // VTERM{
-        case VTE_OSC_VTERM_MARK_PROMPT:
+        case VTE_OSC_ITERM2_133:
                 mark_prompt_row();
                 break;
         // VTERM}
@@ -6487,7 +6487,6 @@ Terminal::OSC(vte::parser::Sequence const& seq)
         case VTE_OSC_XTERM_RESET_COLOR_TEK_BG:
         case VTE_OSC_XTERM_RESET_COLOR_TEK_CURSOR:
         case VTE_OSC_EMACS_51:
-        case VTE_OSC_ITERM2_133:
         case VTE_OSC_ITERM2_1337:
         case VTE_OSC_ITERM2_GROWL:
         case VTE_OSC_KONSOLE_30:
