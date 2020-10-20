@@ -99,7 +99,7 @@ if get_option('gtk3')
     fixxref_args: fixxref_args,
     gobject_typesfile: 'vte.types',
     content_files: content_files,
-    install: false,
+    install: true,
   )
 endif
 

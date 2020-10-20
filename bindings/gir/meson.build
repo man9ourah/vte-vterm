@@ -33,6 +33,6 @@ if get_option('gtk3')
     namespace: 'Vte',
     export_packages: vte_gtk3_api_name,
     header: 'vte' / 'vte.h',
-    install: false,
+    install: true,
   )
 endif

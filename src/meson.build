@@ -229,7 +229,7 @@ if get_option('gtk3')
     include_directories: incs,
     dependencies: libvte_gtk3_deps,
     cpp_args: libvte_gtk3_cppflags,
-    install: false,
+    install: true,
   )
 
   libvte_gtk3_dep = declare_dependency(
@@ -574,7 +574,7 @@ vte_csh = configure_file(
   configuration: {
     'libexecdir': vte_prefix / vte_libexecdir,
   },
-  install: false,
+  install: true,
   install_dir: vte_sysconfdir / 'profile.d',
 )
 
